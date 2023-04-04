@@ -15,6 +15,5 @@ function add(user) {
 }
 
 function getBy(filter) {
-    console.log(filter)
     return db("users").first().where(filter);
 }
