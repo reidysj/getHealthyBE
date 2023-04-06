@@ -5,6 +5,7 @@ module.exports = {
     add,
     getBy,
     associateUser,
+    addWeight,
 };
 
 function getAll() {
@@ -22,6 +23,11 @@ function add(goal) {
         .then(([id]) => {
             return getBy(id);
         });
+}
+
+//TODO: Make this a general update function
+function addWeight(id, weight) {
+    return db("goals").where({ id }).update({ weight });
 }
 
 function associateUser(user_id, goal_id) {
