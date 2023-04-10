@@ -3,14 +3,13 @@ const router = express.Router();
 const Goals = require("./model.js");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
+const authenticator = require("../authentication/authenticator.js");
 
 router.get("/", (_req, res, _next) => {
     Goals.getAll().then((goals) => res.status(200).json(goals));
 });
 
-//TODO: Lock down JWT
-//TODO: Don't continue with null decode on userInfo (middleware related to the above, perhaps)
-router.post("/", (req, res, _next) => {
+router.post("/", authenticator, (req, res, _next) => {
     const goal = req.body.goal;
     const userInfo = jwt.decode(req.body.token);
     console.log(userInfo);
@@ -41,11 +40,10 @@ router.post("/", (req, res, _next) => {
             }
         });
     }
-    //if it doesn't match something already in the db
-    //do what you already have
-    //if there's a selected goal
-    //just do the associate user function
-    // const { goal } = req.body;
 });
+
+function associateUser(userId, goalId) {
+    Goals.associateUser(userId, goalId);
+}
 
 module.exports = router;
